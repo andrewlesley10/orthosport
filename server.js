@@ -32,16 +32,16 @@ app.post('/api/contact', async (req, res) => {
   try {
     await transporter.sendMail({
       from: `"Orthopaedic Surgery & Sports Medicine" <info@orthosports.lk>`,
-      to: 'info@orthosports.lk', // where you want to receive the message
+      to: ['info@orthosports.lk', 'piremsaanth@orthosports.lk'],  // both get the mail
       replyTo: email,
       subject: `New contact form message from ${name}`,
       text: `
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
+    Name: ${name}
+    Email: ${email}
+    Phone: ${phone}
 
-Message:
-${message}
+    Message:
+    ${message}
       `,
       html: `
         <h2>New Contact Form Submission</h2>
@@ -52,6 +52,7 @@ ${message}
         <p>${message.replace(/\n/g, '<br>')}</p>
       `
     });
+
 
     res.json({ ok: true });
   } catch (err) {
