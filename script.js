@@ -331,6 +331,11 @@ form.addEventListener('submit', async (e) => {
     document.getElementById('clearBtn').addEventListener('click', () => {
         resetForm();
     });
+
+    // Initialize hero carousel (if present)
+    if (typeof initHeroCarousel === 'function') {
+        initHeroCarousel();
+    }
 }
 
 function resetForm() {
@@ -364,4 +369,59 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initApp);
 } else {
     initApp();
+}
+
+
+/* Hero Carousel Initialization */
+function initHeroCarousel() {
+    const slides = Array.from(document.querySelectorAll('.hero-slide'));
+    if (!slides.length) return;
+
+    const indicatorsEl = document.getElementById('heroIndicators');
+    let current = slides.findIndex(s => s.classList.contains('active'));
+    if (current === -1) current = 0;
+
+    // create indicators
+    slides.forEach((_, i) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', `Slide ${i + 1}`);
+        if (i === current) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+            goTo(i);
+            restartTimer();
+        });
+        indicatorsEl.appendChild(btn);
+    });
+
+    const indicators = Array.from(indicatorsEl.children);
+
+    function updateIndicators() {
+        indicators.forEach((b, idx) => b.classList.toggle('active', idx === current));
+    }
+
+    function goTo(index) {
+        slides[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+        updateIndicators();
+    }
+
+    function next() {
+        const nextIndex = (current + 1) % slides.length;
+        goTo(nextIndex);
+    }
+
+    let interval = 3000; // changed autoplay interval to 3 seconds per user request
+    let timer = setInterval(next, interval);
+
+    function restartTimer() {
+        clearInterval(timer);
+        timer = setInterval(next, interval);
+    }
+
+    // Pause on hover to improve accessibility
+    const hero = document.querySelector('.hero');
+    hero.addEventListener('mouseenter', () => clearInterval(timer));
+    hero.addEventListener('mouseleave', () => restartTimer());
 }
