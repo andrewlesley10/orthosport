@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Send to both addresses
-    $to = "info@orthosports.lk, piremsaanth@orthosports.lk";
+    $to = "info@orthosports.lk, piremsanth@orthosports.lk";
 
     $subject = "New contact form message from $name";
 
