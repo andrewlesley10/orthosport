@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
 
     if (mail($to, $subject, $body, $headers)) {
-        // Simple success page
+        // Simple success page (for normal form submit)
         echo "<!DOCTYPE html><html><head><meta charset='UTF-8'><title>Thank You</title>";
         echo "<meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body>";
         echo "<h2>Thank you for your message!</h2>";

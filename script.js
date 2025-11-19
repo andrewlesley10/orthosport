@@ -233,77 +233,66 @@ function initApp() {
 
 
 
+// Form submission -> send to PHP backend contact.php
+form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // we'll handle submission via JS
 
-
-
-
-    // Form submission -> send to Node backend /api/contact
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // we'll handle submission via JS
-
-        // Mark all fields as touched
-        fields.forEach(field => {
-            appState.touched[field] = true;
-        });
-
-        // Validate all fields
-        const isValid = validateForm();
-
-        // Display errors
-        fields.forEach(field => {
-            displayFieldError(field);
-        });
-
-        if (!isValid) {
-            // Focus first error field
-            const firstErrorField = fields.find(field => appState.formErrors[field]);
-            if (firstErrorField) {
-                document.getElementById(firstErrorField).focus();
-            }
-            return;
-        }
-
-        const submitBtn = document.getElementById('submitBtn');
-        const successMessage = document.getElementById('successMessage');
-        const originalText = submitBtn.textContent;
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
-
-        // Build payload from state
-        const payload = {
-            name: appState.formData.name,
-            email: appState.formData.email,
-            phone: appState.formData.phone,
-            message: appState.formData.message
-        };
-
-        try {
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const data = await response.json();
-
-            if (response.ok && data.ok) {
-                resetForm();
-                successMessage.classList.remove('hidden');
-                successMessage.textContent = '✓ Thank you for your message! We will get back to you soon.';
-            } else {
-                alert(data.error || 'Something went wrong while sending your message. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error sending form:', error);
-            alert('Unable to send your message right now. Please check your connection and try again.');
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalText;
-        }
+    // Mark all fields as touched
+    fields.forEach(field => {
+        appState.touched[field] = true;
     });
 
+    // Validate all fields
+    const isValid = validateForm();
 
+    // Display errors
+    fields.forEach(field => {
+        displayFieldError(field);
+    });
+
+    if (!isValid) {
+        // Focus first error field
+        const firstErrorField = fields.find(field => appState.formErrors[field]);
+        if (firstErrorField) {
+            document.getElementById(firstErrorField).focus();
+        }
+        return;
+    }
+
+    const submitBtn = document.getElementById('submitBtn');
+    const successMessage = document.getElementById('successMessage');
+    const originalText = submitBtn.textContent;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending...';
+
+    try {
+        // Build form data from the actual form element
+        const formData = new FormData(form);
+
+        const response = await fetch('contact.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            // Clear form & state, then show success message
+            resetForm();
+            successMessage.classList.remove('hidden');
+            successMessage.textContent = '✓ Thank you for your message! We will get back to you soon.';
+        } else {
+            const text = await response.text();
+            console.error('Server error:', text);
+            alert('Something went wrong while sending your message. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error sending form:', error);
+        alert('Unable to send your message right now. Please check your connection and try again.');
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+    }
+});
 
 
 
