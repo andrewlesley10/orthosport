@@ -711,14 +711,7 @@
             padding: calc(var(--space-20) + 4px);
         }
 
-        /* Why Choose Us grid (2x2 line design) */
-        .why-choose {
-            /* More spacious, centered section */
-            max-width: 1000px;
-            margin: 0 auto var(--space-56);
-            padding: var(--space-20) var(--space-12);
-            text-align: center;
-        }
+
 
         .why-choose h2 {
             font-size: clamp(30px, 4.2vw, 44px);
@@ -1014,11 +1007,11 @@
             z-index: 0;
         }
 
-        /* White tint overlay that blends with header */
+        /* Darker tint overlay to boost carousel readability */
         .hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+            background: linear-gradient(rgba(2, 18, 38, 0.75), rgba(2, 18, 38, 0.55));
             pointer-events: none;
             z-index: 1;
         }
@@ -1043,7 +1036,7 @@
             width: 10px;
             height: 10px;
             border-radius: 999px;
-            background: rgba(0,0,0,0.12);
+            background: rgba(var(--accent-green-rgb), 0.4);
             border: none;
             cursor: pointer;
             padding: 0;
@@ -1051,12 +1044,12 @@
         }
 
         .hero-indicators button.active {
-            background: var(--color-primary);
+            background: var(--accent-green);
             transform: scale(1.15);
         }
 
         .hero h1 {
-            color: var(--medical-blue-dark);
+            color: var(--color-cream-50);
             font-size: clamp(32px, 6vw, 64px);
             margin-bottom: var(--space-24);
             line-height: 1.08;
@@ -1068,7 +1061,7 @@
         .hero-tagline {
             font-size: clamp(18px, 2.5vw, 22px);
             margin-bottom: var(--space-36, 36px);
-            color: rgba(0, 0, 0, 0.65);
+            color: rgba(255, 255, 255, 0.85);
             max-width: 900px;
             margin-left: auto;
             margin-right: auto;
